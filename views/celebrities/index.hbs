@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+    <h1>Celebrities</h1>
+    
+    <ul>
+      {{#each allCelebrities}}
+        <li>
+          <h2>{{this.name}}</h2>
+          <p>Occupation: {{this.occupation}}</p>
+          <p>Catchphrase: "{{this.catchPhrase}}"</p>
+        </li>
+      {{/each}}
+    </ul>
+</html>
