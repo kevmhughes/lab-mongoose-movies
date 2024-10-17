@@ -7,24 +7,26 @@
     <title>Document</title>
   </head>
 
-  <body>
+  <body class="container">
     <h1>Celebrities</h1>
 
     <ul>
       {{#each allCelebrities}}
-        <li>
-          <p><a href="/celebrities/{{this._id}}">{{this.name}}</a></p>
+        <li style="list-style-type: none;">
+          <p><a style="text-decoration: none; font-size: 1rem" href="/celebrities/{{this._id}}">{{this.name}}</a></p>
+          <div style="display: flex; gap: 20px">
           <form method="post" action="celebrities/{{this._id}}/delete">
-            <button type="submit">delete</button>
+            <button type="submit" style="width: 150px;">Delete</button>
           </form>
           <form method="get" action="celebrities/{{this._id}}/edit">
-            <button type="submit">edit</button>
+            <button type="submit" style="width: 150px;">Edit</button>
           </form>
+          </div>
         </li>
       {{/each}}
     </ul>
 
-    <a href="/celebrities/new">add a celebrity</a>
+    <a style="font-size: 1rem" href="/celebrities/new">add a celebrity</a>
   </body>
 
 </html>
