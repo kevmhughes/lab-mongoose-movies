@@ -6,13 +6,19 @@
       <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
     <title>Add New Celebrity</title>
 </head>
-<body>
-    <h2>Add a New Celebrity</h2>
+<body class="container">
+    <h2>Add A New Celebrity</h2>
+
+        {{#if errorMessage}}
+            <div>
+                <p style="color: red;">{{errorMessage}}</p>
+            </div>
+        {{/if}}
     
     <form method="post" action="/celebrities">
         <!-- Celebrity Name -->
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" placeholder="Celebrity Name" required>
+        <input type="text" id="name" name="name" placeholder="Name" required>
         
         <!-- Celebrity Occupation -->
         <label for="occupation">Occupation:</label>
@@ -20,7 +26,7 @@
         
         <!-- Celebrity Catchphrase -->
         <label for="catchPhrase">Catchphrase:</label>
-        <input type="text" id="catchPhrase" name="catchPhrase" placeholder="Catchphrase" required>
+        <input type="text" id="catchPhrase" name="catchPhrase" placeholder="Catch Phrase" required>
         
         <!-- Submit Button -->
         <button type="submit">Add Celebrity</button>
