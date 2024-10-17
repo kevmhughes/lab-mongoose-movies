@@ -17,6 +17,9 @@
           <form method="post" action="celebrities/{{this._id}}/delete">
             <button type="submit">delete</button>
           </form>
+          <form method="get" action="celebrities/{{this._id}}/edit">
+            <button type="submit">edit</button>
+          </form>
         </li>
       {{/each}}
     </ul>

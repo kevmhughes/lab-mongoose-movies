@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Edit Celebrity</h2>
+    <form method="post" action="/celebrities/{{oneCelebrityToEdit.id}}">
+        <!-- Celebrity Name -->
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" placeholder="Name" value="{{oneCelebrityToEdit.name}}" required>
+        
+        <!-- Celebrity Occupation -->
+        <label for="occupation">Occupation:</label>
+        <input type="text" id="occupation" name="occupation" placeholder="Occupation" value="{{oneCelebrityToEdit.occupation}}" required>
+        
+        <!-- Celebrity Catchphrase -->
+        <label for="catchPhrase">Catchphrase:</label>
+        <input type="text" id="catchPhrase" name="catchPhrase" placeholder="Catch Phrase" value="{{oneCelebrityToEdit.catchPhrase}}" required>
+        
+        <!-- Submit Button -->
+        <button type="submit">Edit Celebrity</button>
+    </form>
+</body>
+</html>

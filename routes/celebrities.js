@@ -4,26 +4,22 @@ const Celebrity = require("../models/celebrity")
 
 /* GET celebrities page */
 router.get('/celebrities', async (req, res, next) => {
-
     try {
         // Fetch all celebrities from the database
         const allCelebrities = await Celebrity.find();
-
         // Render the 'celebrities/index' view and pass the data
         return res.status(200).render('celebrities/index', { allCelebrities });
     } catch (error) {
         console.error('Error fetching celebrities:', error);
-
         // Pass the error to the next middleware
         return next(error);
     }
-
 });
 
 /* GET add new celebrity form */
 router.get('/celebrities/new', (req, res, next) => {
     //render the add new celebrity form
-    return res.render('celebrities/new')
+    return res.status(200).render('celebrities/new')
 });
 
 /* POST new celebrity */
@@ -40,16 +36,15 @@ router.post('/celebrities', async (req, res, next) => {
             });
         }
 
-        // add new celebrity to the database
+        // Create new celebrity instance and save it
+        const newCelebrity = new Celebrity({ name, occupation, catchPhrase });
         await newCelebrity.save();
 
-        return res.status(200).redirect("/celebrities")
-
+        return res.status(201).redirect("/celebrities")
     } catch (error) {
         console.error('Error adding celebrity to the database:', error);
-
         // Pass the error to the next middleware
-        return res.render("celebrities/new")
+        return res.status(500).render("celebrities/new")
     }
 });
 
@@ -59,7 +54,6 @@ router.get('/celebrities/:id', async (req, res, next) => {
     try {
         // retrieve id from params 
         const { id } = req.params
-
         // find the celebrity with the id
         const oneCelebrity = await Celebrity.findById(id);
 
@@ -67,11 +61,9 @@ router.get('/celebrities/:id', async (req, res, next) => {
         return res.status(200).render('celebrities/show', { oneCelebrity });
     } catch (error) {
         console.error('Error fetching celebrity:', error);
-
         // Pass the error to the next middleware
         return next(error);
     }
-
 });
 
 /* POST delete celebrity from database */
@@ -80,10 +72,9 @@ router.post('/celebrities/:id/delete', async (req, res, next) => {
     try {
         // retrieve id from params 
         const { id } = req.params
-
         // find the celebrity with the id
         const oneCelebrity = await Celebrity.findByIdAndRemove(id);
- 
+
         if (!oneCelebrity) {
             // If no celebrity is found with that id, respond with 404 Not Found
             return res.status(404).send('Celebrity not found');
@@ -92,11 +83,62 @@ router.post('/celebrities/:id/delete', async (req, res, next) => {
         return res.status(200).redirect('/celebrities');
     } catch (error) {
         console.error('Error deleting celebrity:', error);
+        // Pass the error to the next middleware
+        return next(error);
+    }
+});
+
+/* GET delete celebrity form from database */
+router.get('/celebrities/:id/edit', async (req, res, next) => {
+    try {
+        // retrieve id from params 
+        const { id } = req.params
+        // find the celebrity with the id
+        const oneCelebrityToEdit = await Celebrity.findById(id);
+
+        // Check if celebrity was found
+        if (!oneCelebrityToEdit) {
+            return res.status(404).send('Celebrity not found');
+        }
+
+        return res.status(200).render("celebrities/edit", {
+            oneCelebrityToEdit
+        })
+    } catch (error) {
+        console.error('Error getting deletion form:', error);
+        // Pass the error to the next middleware
+        return next(error);
+    }
+});
+
+/* POST edit and update celebrity details */
+router.post('/celebrities/:id', async (req, res, next) => {
+
+    try {
+        // retrieve id from params 
+        const { id } = req.params
+
+        // Create update object
+        const update = {
+            name: req.body.name,
+            occupation: req.body.occupation,
+            catchPhrase: req.body.catchPhrase // fixed spelling here
+        };
+
+        // Update the celebrity details
+        const updatedCelebrity = await Celebrity.findByIdAndUpdate(id, update, { new: true });
+
+        if (!updatedCelebrity) {
+            return res.status(404).send('Celebrity not found');
+        }
+
+        return res.status(200).redirect("/celebrities")
+    } catch (error) {
+        console.error('Error updating celebrity details:', error);
 
         // Pass the error to the next middleware
         return next(error);
     }
-
 
 });
 
