@@ -8,7 +8,7 @@ router.get('/celebrities', async (req, res, next) => {
         // Fetch all celebrities from the database
         const allCelebrities = await Celebrity.find();
         // Render the 'celebrities/index' view and pass the data
-        return res.status(200).render('celebrities/index', { allCelebrities });
+        return res.status(200).render('celebrities/index.ejs', { allCelebrities });
     } catch (error) {
         console.error('Error fetching celebrities:', error);
         // Pass the error to the next middleware
@@ -19,19 +19,20 @@ router.get('/celebrities', async (req, res, next) => {
 /* GET add new celebrity form */
 router.get('/celebrities/new', (req, res, next) => {
     //render the add new celebrity form
-    return res.status(200).render('celebrities/new')
+    return res.status(200).render('celebrities/new.ejs', {
+        errorMessage: ''
+    })
 });
 
 /* POST new celebrity */
 router.post('/celebrities', async (req, res, next) => {
-
     try {
-        const { name, occupation, catchPhrase } = req.body
+        const { name, occupation, catchPhrase } = req.body;
 
         // Basic validation
         if (!name || !occupation || !catchPhrase) {
             // Render the form again with an error message
-            return res.status(400).render('celebrities/new', {
+            return res.status(400).render('celebrities/new.ejs', {
                 errorMessage: 'All fields are required.'
             });
         }
@@ -40,11 +41,13 @@ router.post('/celebrities', async (req, res, next) => {
         const newCelebrity = new Celebrity({ name, occupation, catchPhrase });
         await newCelebrity.save();
 
-        return res.status(201).redirect("/celebrities")
+        return res.status(201).redirect("/celebrities");
     } catch (error) {
         console.error('Error adding celebrity to the database:', error);
-        // Pass the error to the next middleware
-        return res.status(500).render("celebrities/new")
+        // Pass the error to the template
+        return res.status(500).render("celebrities/new.ejs", {
+            errorMessage: 'An error occurred while adding the celebrity. Please try again.'
+        });
     }
 });
 
@@ -58,7 +61,7 @@ router.get('/celebrities/:id', async (req, res, next) => {
         const oneCelebrity = await Celebrity.findById(id);
 
         // Render the 'celebrities/show' view and pass the data
-        return res.status(200).render('celebrities/show', { oneCelebrity });
+        return res.status(200).render('celebrities/show.ejs', { oneCelebrity });
     } catch (error) {
         console.error('Error fetching celebrity:', error);
         // Pass the error to the next middleware
@@ -101,7 +104,7 @@ router.get('/celebrities/:id/edit', async (req, res, next) => {
             return res.status(404).send('Celebrity not found');
         }
 
-        return res.status(200).render("celebrities/edit", {
+        return res.status(200).render("celebrities/edit.ejs", {
             oneCelebrityToEdit
         })
     } catch (error) {
